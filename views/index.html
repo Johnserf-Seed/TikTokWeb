@@ -23,6 +23,41 @@
             flex: 1 1 auto;
             position: relative;
         }
+
+        .card {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0,0,0,.125);
+            border-radius: .25rem
+        }
+
+
+        .card-body {
+            -webkit-box-flex: 1;
+            -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+            padding: 1.25rem
+        }
+
+        .card-header:first-child {
+            border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0
+        }
+
+        .card-header+.list-group .list-group-item:first-child {
+            border-top: 0
+        }
+
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
     <script>
@@ -33,20 +68,20 @@
             try {
                 let seachTxt = window.location.href.split("=");
                 // 00000000 ['http://localhost:3000/']
-                console.log('00000000',seachTxt)
+                // console.log('00000000',seachTxt)
                 seachTxt = decodeURI(seachTxt [1])
                 if (seachTxt === 'undefined'){
-                    console.log('11111111',seachTxt, 'is undefined')
+                    // console.log('11111111',seachTxt, 'is undefined')
                     video_info.style.display = "none";
                 } else {
                     // 22222222 ['http://localhost:3000/']
-                    console.log('22222222',typeof(seachTxt), seachTxt)
+                    // console.log('22222222',typeof(seachTxt), seachTxt)
                     //解码url
                     // seachTxt = decodeURI(seachTxt [1]); //decodeURI解码
-                    console.log('33333333',seachTxt)
+                    // console.log('33333333',seachTxt)
                     $("#video_url").attr('value',seachTxt)
                     video_info.style.display = "block";
-                    console.log('4444444',seachTxt)
+                    // console.log('4444444',seachTxt)
                     return 0;
                 }
             } catch (error) {
@@ -58,83 +93,87 @@
 </head>
 <body class="bs-docs-home">
     <div class="container theme-showcase">
-        <div class="row">
-            <div class="col-sm-6">
+    <div class="col-sm-6">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-    <div id="tk">
-        <div>
-            <h1>TikTokWeb</h1>
-            <blockquote>
-                <p><em>输入长短链点击解析视频试试吧！</em></p>
-            </blockquote>
+    <div class="row">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div id="tk">
+                <h1>TikTokWeb</h1>
+                <blockquote>
+                    <p><em>输入长短链点击解析视频试试吧！</em></p>
+                </blockquote>
 
-            <div class="input-group input-group-lg" style="margin-bottom: 10px;">
-                <input type="text" class="form-control link-input" name="请输入链接" value="https://v.douyin.com/NKyY6Ch/" id="video_url">
-                    <div class="input-group-btn">
-                        <div class="btn-clear" id="btn-clear"></div>
-                        <button class="btn btn-default" type="button" value="处理" id="get">解析视频</button>
-                    </div>
+                <div class="input-group input-group-lg" style="margin-bottom: 10px;">
+                    <input type="text" class="form-control link-input" name="请输入链接" value="https://v.douyin.com/NKyY6Ch/" id="video_url">
+                        <div class="input-group-btn">
+                            <div class="btn-clear" id="btn-clear">
+                                <button class="btn btn-default" type="button" value="处理" id="get">解析视频</button>
+                            </div>
+                        </div>
+                </div>
+
             </div>
 
-            <script>
-            </script>
+            <div style="display: none;" id="video-info">
+                <span>
+                    <div class="card">
+                        <div class="card-body">
+                    <table width="100%">
+                        <tr align="center">
+                            <td>
+                                <div class="video_play">
+                                    <!--
+                                    <video id="play" preload="auto" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/396624/err.mp4" autoplay muted loop></video>
+                                    -->
+                                    <video controls autoplay width="85%" controls="controls" id="play" preload="auto" type="video/mp4" webkit-playsinline="true" playsinline="" x5-video-player-type="h5" x5-video-player-fullscreen="portraint">
+                                        <source src="<%= data.url %>" type="video/mp4">
+                                    </video>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span id="desc" style="text-align: center;display: block;">
+                                    <%= data.desc %>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <button id="download">
+                                    <a target="_blank" style="color: white;" rel="noreferrer" href="<%= data.url %>" download="<%= data.desc %>.mp4">
+                                    下载
+                                    </a>
+                                </button>
+                                <button id="copylink">
+                                    <a target="_blank" style="color: white;" rel="noreferrer" href="<%= data.url %>" download="douyin.mp4">
+                                    复制链接
+                                    </a>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+                </span>
+
+                <footer>
+                    <span style="text-align: center;display: block;">
+                        <a target="_blank" style="color: #9b4dca;" rel="noreferrer" href="https://github.com/Johnserf-Seed/TikTokWeb">
+                            GitHub·JohnserfSeed·2022
+                        </a>
+                    </span>
+                </footer>
+
+            </div>
         </div>
     </div>
-
-    <div style="display: none;" id="video-info">
-        <span>
-            <table width="100%">
-                <tr align="center">
-                    <td>
-                        <div class="video_play">
-                            <!--
-                            <video id="play" preload="auto" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/396624/err.mp4" autoplay muted loop></video>
-                            -->
-                            <video controls autoplay width="100%" controls="controls" id="play" preload="auto" type="video/mp4" webkit-playsinline="true" playsinline="" x5-video-player-type="h5" x5-video-player-fullscreen="portraint">
-                                <source src="<%= data.url %>" type="video/mp4">
-                            </video>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span id="desc">
-                            <%= data.desc %>
-                        </span>
-                    </td>
-                </tr>
-                <tr align="center">
-                    <td>
-                        <button id="download">
-                            <a target="_blank" style="color: white;" rel="noreferrer" href="<%= data.url %>" download="<%= data.desc %>.mp4">
-                            下载
-                            </a>
-                        </button>
-                        <button id="copylink">
-                            <a target="_blank" style="color: white;" rel="noreferrer" href="<%= data.url %>" download="douyin.mp4">
-                            复制链接
-                            </a>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </span>
-        <footer>
-            <span style="text-align: center;display: block;">
-                <a target="_blank" style="color: #9b4dca;" rel="noreferrer" href="https://github.com/Johnserf-Seed/TikTokWeb">
-                    GitHub·JohnserfSeed·2022
-                </a>
-            </span>
-        </footer>
     </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+    </div>
+    </div>
+    </div>
 <script>
     $("#get").click(function(){
         let url = $('#video_url').val()
