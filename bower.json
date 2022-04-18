@@ -1,0 +1,21 @@
+{
+  "name": "tiktokweb",
+  "description": "tiktokweb bower",
+  "main": "",
+  "authors": [
+    "JohnserfSeed <johnserf-seed@foxmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Johnserf-Seed/TikTokWeb",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "boostrap": "^5.1.3"
+  }
+}
