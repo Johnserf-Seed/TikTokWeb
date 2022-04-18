@@ -15,7 +15,6 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "serve-favicon": "^2.5.0",
-    "webpack": "^5.72.0"
+    "serve-favicon": "^2.5.0"
   }
 }
