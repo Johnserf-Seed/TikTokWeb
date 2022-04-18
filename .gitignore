@@ -1,3 +1,8 @@
+# Node.js
+node_modules
+bower_components
+nodemon
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
