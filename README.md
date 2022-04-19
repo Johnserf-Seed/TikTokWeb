@@ -5,16 +5,15 @@
 # Install
 
 ```
-mkdir TikTokWeb
-cd TikTokWeb
 git clone https://github.com/Johnserf-Seed/TikTokWeb.git
+cd TikTokWeb
+npm i -g
+bower install
 ```
 
 # Run
 
 ```
-npm i -g
-bower install
 npm start
 http://localhost:3000/
 ```
