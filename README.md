@@ -14,6 +14,7 @@ git clone https://github.com/Johnserf-Seed/TikTokWeb.git
 
 ```
 npm install
+bower install
 npm start
 http://localhost:3000/
 ```
