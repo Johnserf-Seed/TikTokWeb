@@ -5,16 +5,17 @@
 # Install
 
 ```
-mkdir TikTokWeb
-cd TikTokWeb
 git clone https://github.com/Johnserf-Seed/TikTokWeb.git
+cd TikTokWeb
+npm i -g
+bower install
 ```
 
 # Run
 
 ```
-npm install
 npm start
 http://localhost:3000/
 ```
 
+<img src="https://visitor-badge.glitch.me/badge?page_id=johnserf-seed.tiktokweb" alt="访客统计" />
