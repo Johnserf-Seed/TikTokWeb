@@ -7,8 +7,7 @@
 ```
 git clone https://github.com/Johnserf-Seed/TikTokWeb.git
 cd TikTokWeb
-npm i -g
-bower install
+npm i
 ```
 
 # Run
