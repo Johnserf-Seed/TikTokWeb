@@ -1,5 +1,6 @@
 let express = require('express');
-const axios = require('axios')
+const axios = require('axios');
+const res = require('express/lib/response');
 const errwin = /[\\\\/:*?\"<>|]/g;
 const subwin = ``;
 const httpurl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
@@ -7,7 +8,7 @@ const httpurl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'
 let router = express.Router();
 
 // 获取作品ID
-var GetID = function (dyurl) {
+var GetID = function (res,dyurl) {
     return new Promise((resolve, reject) => {
         try {
             axios.get(dyurl, {
@@ -21,7 +22,8 @@ var GetID = function (dyurl) {
                 // console.log(item_ids)
                 resolve(item_ids)
             }).catch(function (error) {
-                console.log(error + 'item_ids获取错误')
+                console.log(error + '  item_ids获取错误')
+                res.render('error');
                 next(error)
                 reject(error)
                 // return 0;
@@ -32,7 +34,7 @@ var GetID = function (dyurl) {
     })
 }
 
-var GetInfo =function (item_ids) {
+var GetInfo =function (res,item_ids) {
     console.log('GetInfo ok')
     return new Promise((resolve, reject) => {
         axios.get(`https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=${item_ids}`, {
@@ -53,6 +55,9 @@ var GetInfo =function (item_ids) {
                         'playwm',
                         'play'
                     )
+                    // 转换成1080p
+                    url = url.replace('720p','1080p')
+                    console.log('1080p',url)
                     // 视频文案
                     let desc = item_list[0].desc;
                     // 文案过滤非法字符
@@ -72,6 +77,7 @@ var GetInfo =function (item_ids) {
             })
             .catch(function (error) {
                 console.log(error)
+                res.render('error');
                 reject(error)
             })
     })
@@ -88,16 +94,17 @@ router.get('/', async function(req, res, next) {
     // let urlReg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
     // let dyurl = urlReg.exec(req.query.url)[0]
     let dyurl = req.query.url;
-    await GetID(dyurl).then(item_ids => {
+    await GetID(res,dyurl).then(item_ids => {
         // console.log(item_ids)
         console.log('11111111111')
-        GetInfo(item_ids).then(data => {
+        GetInfo(res,item_ids).then(data => {
             console.log('11111111111',data)
             res.render('index', { data });
         });
-    }).catch((err) =>{
-        next(err)
-        console.log(err)
+    }).catch((error) =>{
+        console.log('22222',error)
+        next(error)
+        res.render('error');
     });
 
     console.log('open url ok')
