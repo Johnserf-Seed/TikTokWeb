@@ -16,17 +16,15 @@ var GetID = function (res,dyurl) {
                     'user-agent': ' Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
                 }
             }).then(function (response) {
-                console.log(response.request.res.responseUrl)
+                // console.log(response.request.res.responseUrl);
                 var revideo = /video\/(\d*)/
                 var item_ids = revideo.exec(response.request.res.responseUrl)[1]
-                // console.log(item_ids)
+                console.log('作品id  ' + item_ids);
                 resolve(item_ids)
             }).catch(function (error) {
-                console.log(error + '  item_ids获取错误')
+                console.log(error + '  item_ids获取错误');
                 res.render('error');
-                next(error)
-                reject(error)
-                // return 0;
+                reject(error);
             })
         } catch (error) {
             console.log(error)
@@ -34,45 +32,47 @@ var GetID = function (res,dyurl) {
     })
 }
 
+// 获取作品信息
 var GetInfo =function (res,item_ids) {
-    console.log('GetInfo ok')
     return new Promise((resolve, reject) => {
-        axios.get(`https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=${item_ids}`, {
+        axios.post(`https://www.iesdouyin.com/aweme/v1/web/aweme/detail/?aweme_id=${item_ids}`, {
                     headers: {
                         'user-agent': ' Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
                     }
                 }
             ).then(function (response) {
-                console.log('item_ids ok')
+                console.log('GetInfo ok')
                 // console.log("response", response.data)
                 let {
-                    status_code,
-                    item_list
+                    status_code
                 } = response.data
+                // console.log(response)
                 if (status_code === 0) {
                     // 无水印视频链接
-                    let url = item_list[0].video.play_addr.url_list[0].replace(
-                        'playwm',
-                        'play'
-                    )
+                    // let url = item_list.video.play_addr.url_list[0].replace(
+                    //     'playwm',
+                    //     'play'
+                    // )
+                    // let url = response.data.aweme_detail.video.play_addr.url_list[2]
+                    let uri = response.data.aweme_detail.video.play_addr.uri
                     // 转换成1080p
-                    url = url.replace('720p','1080p')
-                    console.log('1080p',url)
+                    url = `http://aweme.snssdk.com/aweme/v1/play/?video_id=${uri}&ratio=1080p`
+                    console.log('1080p  ',url);
                     // 视频文案
-                    let desc = item_list[0].desc;
+                    let desc = response.data.aweme_detail.desc;
                     // 文案过滤非法字符
                     desc.replace(errwin, subwin);
 
-                    console.log('video play url', url)
-                    console.log('video desc', desc)
-
+                    console.log('video play url  ', url);
+                    console.log('video desc  ', desc);
                     var data = ({
                         url: url,
                         desc: desc
-                    })
-                    resolve(data)
+                    });
+                    resolve(data);
                 } else {
-                    reject(status_code)
+                    console.log(status_code);
+                    reject(status_code);
                 }
             })
             .catch(function (error) {
@@ -82,32 +82,32 @@ var GetInfo =function (res,item_ids) {
             })
     })
 }
+
 /* GET api. */
 router.get('/', async function(req, res, next) {
     if (req.query.url == ''){
         // 默认视频
         req.query.url = 'https://v.douyin.com/NKyY6Ch/'
     }
-    console.log('open shorturl ok')
-    console.log(req.query.url)
+    console.log('open shorturl ok');
+    // console.log(req.query.url)
 
     // let urlReg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g
     // let dyurl = urlReg.exec(req.query.url)[0]
     let dyurl = req.query.url;
     await GetID(res,dyurl).then(item_ids => {
-        // console.log(item_ids)
-        console.log('11111111111')
+        // console.log(item_ids);
+        // console.log('11111111111');
         GetInfo(res,item_ids).then(data => {
-            console.log('11111111111',data)
+            console.log('data',data);
             res.render('index', { data });
         });
     }).catch((error) =>{
-        console.log('22222',error)
-        next(error)
+        console.log('22222',error);
         res.render('error');
     });
 
-    console.log('open url ok')
+    console.log('open url ok');
 });
 
 module.exports = router;
