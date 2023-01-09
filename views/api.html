@@ -5,16 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="never">
-    <link rel="stylesheet" href="/static/stylesheets/style.css">
-    <link rel="stylesheet" href="/bower_components/milligram/dist/milligram.min.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon">
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="/static/javascripts/download.js"></script>
+    <link rel="stylesheet" href="./static/stylesheets/style.css">
+    <link rel="shortcut icon" href="./static/images/favicon.ico" type="image/x-icon">
+    <!--<script src="./static/javascripts/download.js"></script>-->
     <script>
         $(document).ready(function(){
-            let seachTxt = window.location.href.split("=");  
-            //解码url 
-            seachTxt = decodeURI(seachTxt [1]); //decodeURI解码  
+            let seachTxt = window.location.href.split("=");
+            //解码url
+            seachTxt = decodeURI(seachTxt [1]); //decodeURI解码
             console.log(seachTxt)
             $("#video_url").attr('value',seachTxt)
         });
