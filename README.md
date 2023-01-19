@@ -14,7 +14,7 @@ npm i
 
 ```
 npm start
-http://localhost:3000/
+http://localhost:4000/
 ```
 
 <img src="https://visitor-badge.glitch.me/badge?page_id=johnserf-seed.tiktokweb" alt="访客统计" />
