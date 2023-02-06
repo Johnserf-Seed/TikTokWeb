@@ -35,9 +35,10 @@ var GetID = function (res,dyurl) {
 // 获取作品信息
 var GetInfo =function (res,item_ids) {
     return new Promise((resolve, reject) => {
-        axios.post(`https://www.iesdouyin.com/aweme/v1/web/aweme/detail/?aweme_id=${item_ids}`, {
+        axios.get(`https://www.iesdouyin.com/aweme/v1/web/aweme/detail/?aweme_id=${item_ids}&aid=1128&version_name=23.5.0&device_platform=android&os_version=2333`, {
                     headers: {
-                        'user-agent': ' Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
+                        'cookie': 'ttcid=fc21ed8a713b4a689f0a96f9f2bcd94833; tt_scid=cvwB6NvZMh82mfKdjm9zU4xUwtpzvswItKu9vSyL50Yd8gAoJaX1CoIaLBKRykxb36f9',
+                        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
                     }
                 }
             ).then(function (response) {
@@ -74,8 +75,7 @@ var GetInfo =function (res,item_ids) {
                     console.log(status_code);
                     reject(status_code);
                 }
-            })
-            .catch(function (error) {
+            }).catch(function (error) {
                 console.log(error)
                 res.render('error');
                 reject(error)
