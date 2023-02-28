@@ -101,6 +101,9 @@ router.get('/', async function(req, res, next) {
         GetInfo(res,item_ids).then(data => {
             console.log('data',data);
             res.render('index', { data });
+        }).catch((error) =>{
+            console.log('GetID error:',error);
+            res.render('error');
         });
     }).catch((error) =>{
         console.log('22222',error);
