@@ -1,8 +1,25 @@
 # TikTokWeb
+## Show
 
-<img src="https://tvax2.sinaimg.cn/large/006908GAly1h1e6e0mjmbj30m217a168.jpg" alt="image" style="zoom:75%;" />
+- dycookie配置
 
-# Install
+  <img src="https://tvax4.sinaimg.cn/large/006908GAly1hctv2nwfzoj30qe0ojwkt.jpg" alt="image" width="950" data-width="950" data-height="883">
+
+- 视频和原声下载(会有原声不可用的情况，app中会遇到，无法直接下载)
+
+  <img src="https://tvax2.sinaimg.cn/large/006908GAly1hctv4l9beoj30l00pydnr.jpg" alt="image" width="756" data-width="756" data-height="934">
+
+- 图集打包下载功能(自动文件夹+命名)
+
+  <img src="https://tvax4.sinaimg.cn/large/006908GAly1hctv5e750ej30ky0pn4c2.jpg" alt="image" width="754" data-width="754" data-height="923">
+
+  <img src="https://tvax1.sinaimg.cn/large/006908GAly1hctv5umi9wj30nm02rt9c.jpg" alt="image" width="850" data-width="850" data-height="99">
+
+  <img src="https://tvax3.sinaimg.cn/large/006908GAly1hctv89bwfrj30p304vwk1.jpg" alt="image" width="903" data-width="903" data-height="175">
+
+  <img src="https://tvax1.sinaimg.cn/large/006908GAly1hctvh3a01bg318p0pv7ws.gif" alt="6432dbc2137bf_6432dbc222116" width="1609" data-width="1609" data-height="931">
+
+## Install
 
 ```
 git clone https://github.com/Johnserf-Seed/TikTokWeb.git
@@ -10,7 +27,7 @@ cd TikTokWeb
 npm i
 ```
 
-# Run
+## Run
 
 ```
 npm start
