@@ -5,22 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="never">
-    <meta name="description" content="download video without water mesk">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/milligram/milligram/dist/milligram.min.css">
-    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/johnserf-seed/TikTokDownload/Logo.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/johnserf-seed/TikTokDownload/Logo.ico">
+    <meta name="description" content="download douyin video images without water mesk">
+    <link rel="stylesheet" href="../static/stylesheets/milligram.min.css">
+    <link rel="stylesheet" href="../static/stylesheets/progress.css">
+    <link rel='stylesheet' href='../static/stylesheets/unicons.css'>
+    <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../static/images/favicon.ico">
     <style>
         body {
             padding: 0;
+            min-width: 70%;
             font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
         }
+
         .tk{
-            width: 50%;
+            width: 40%;
             margin: 0 auto;
         }
-        a {
-            color: #ffffff;
-        }
+
         .video_play{
             min-width: 0;
             flex: 1 1 auto;
@@ -41,7 +43,7 @@
             background-color: #fff;
             background-clip: border-box;
             border: 1px solid rgba(0,0,0,.125);
-            border-radius: .25rem
+            border-radius: 1rem
         }
 
         .card-body {
@@ -59,8 +61,15 @@
             border-top: 0
         }
 
+        img {
+            height: auto;
+            width: 100%;
+        }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="../static/javascripts/jquery.min.js"></script>
+    <script src="../static/javascripts/jquery.cookie.min.js"></script>
+    <script src="../static/javascripts/jszip.min.js"></script>
+    <script src="../static/javascripts/FileSaver.min.js"></script>
     <script>
         $(document).ready(function(){
             $('#setcookie').click(function(){
@@ -298,5 +307,6 @@
         }
     });
     </script>
+    <script src="../static/javascripts/progress.js"></script>
 </body>
 </html>
