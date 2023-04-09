@@ -272,6 +272,74 @@
     </div>
 </div>
 <script>
+    //图片转base64; 传入图片路径，返回base64
+    function getBase64(img,index) {
+        function getBase64Image(img, width, height) {
+            var canvas = document.createElement("canvas");
+            canvas.width = width ? width : img.width;
+            canvas.height = height ? height : img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            var dataURL = canvas.toDataURL();
+            return dataURL;
+        }
+        var image = new Image();
+        image.crossOrigin = 'Anonymous';
+        image.src = img;
+        /*
+        * deferred对象是一个延迟对象，意思是函数延迟到某个点才开始执行，改变执行状态的方法有两个（成功：resolve和失败：reject），
+        * 分别对应两种执行回调（成功回调函数：done和失败回调函数fail）
+        * */
+        var deferred = $.Deferred();
+        if (img) {
+            image.onload = function () {
+                // 执行成功回调
+                deferred.resolve(getBase64Image(image),index);
+            }
+            return deferred.promise();
+        }
+    }
+</script>
+
+<script>
+    var zip = new JSZip();
+    // 下载所有图片
+    function downloadall() {
+        var strimage = '<%- data.images %>'
+        var desc = '<%- data.desc %>'
+        var images = [];
+        var imgBase64 = {};
+        images  = strimage.split(',')
+        // 压缩包文件夹
+        var folder = zip.folder(desc);
+        // 读取所有图片返回base64
+        for (var i = 0; i < images.length; i++) {
+            getBase64(images[i],i).then(function (base64,index) {
+                //imgBase64.push(base64.substring(22));  // 去掉base64的图片格式前缀
+                imgBase64[index] = base64.substring(22);
+            }, function (err) {
+                console.log(err);
+            });
+        };
+        // 发送下载
+        function downloadZip() {
+            setTimeout(function () {
+                if (images.length == Object.keys(imgBase64).length) {
+                    for (var i = 0; i < images.length; i++) {
+                        folder.file(desc + i + ".jpg", imgBase64[i], { base64: true });
+                    }
+                    zip.generateAsync({ type: "blob" }).then(function (content) {
+                        saveAs(content, desc + ".zip"); // zip包命名并下载
+                    });
+                } else {
+                    downloadZip();
+                }
+            }, 100);
+        };
+        downloadZip();
+    };
+</script>
+<script>
     $("#get").click(function(){
         if (!$.cookie('dycookie')){
             alert('请先填写抖音的cookie才可以正常解析作品')
