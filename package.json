@@ -10,12 +10,28 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "^3.1.6",
-    "express": "~4.16.1",
+    "express": "^4.18.2",
     "express-handlebars": "^6.0.5",
+    "file-saver": "^2.0.5",
     "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
+    "jade": "^1.9.2",
+    "jszip": "^3.10.1",
+    "md5": "^2.3.0",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.15",
     "serve-favicon": "^2.5.0"
-  }
+  },
+  "description": "<img src=\"https://tvax2.sinaimg.cn/large/006908GAly1h1e6e0mjmbj30m217a168.jpg\" alt=\"image\" style=\"zoom:75%;\" />",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Johnserf-Seed/TikTokWeb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Johnserf-Seed/TikTokWeb/issues"
+  },
+  "homepage": "https://github.com/Johnserf-Seed/TikTokWeb#readme"
 }
