@@ -1,10 +1,13 @@
 let express = require('express');
 const axios = require('axios');
 const res = require('express/lib/response');
-const errwin = /[\\\\/:*?\"<>|]/g;
+const errwin = /[\\\n\r/:*?\"<>|]/g;
 const subwin = ``;
 const httpurl = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
-
+// 获取XB参数
+const getXB = require('../utils/x-bogus.js')
+// 单作品接口
+const aweme_url = 'https://www.douyin.com/aweme/v1/web/aweme/detail/?'
 let router = express.Router();
 
 // 获取作品ID
@@ -13,7 +16,7 @@ var GetID = function (res,dyurl) {
         try {
             axios.get(dyurl, {
                 headers: {
-                    'user-agent': ' Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
+                    'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
                 }
             }).then(function (response) {
                 // console.log(response.request.res.responseUrl);
@@ -96,14 +99,12 @@ router.get('/', async function(req, res, next) {
     // let dyurl = urlReg.exec(req.query.url)[0]
     let dyurl = req.query.url;
     await GetID(res,dyurl).then(item_ids => {
-        // console.log(item_ids);
-        // console.log('11111111111');
-        GetInfo(res,item_ids).then(data => {
-            console.log('data',data);
+        GetInfo(res,item_ids,req.cookies['dycookie']).then(data => {
+            //console.log('data',data);
             res.render('index', { data });
         });
     }).catch((error) =>{
-        console.log('22222',error);
+        console.log('GetID Error',error);
         res.render('error');
     });
 
