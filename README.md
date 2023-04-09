@@ -17,7 +17,7 @@
 
   <img src="https://tvax3.sinaimg.cn/large/006908GAly1hctv89bwfrj30p304vwk1.jpg" alt="image" width="903" data-width="903" data-height="175">
 
-  <img src="https://tvax1.sinaimg.cn/large/006908GAly1hctvh3a01bg318p0pv7ws.gif" alt="6432dbc2137bf_6432dbc222116" width="1609" data-width="1609" data-height="931">
+  <img src="https://tvax1.sinaimg.cn/large/006908GAly1hctvzv94szg30mo0pqx6w.gif" alt="6432df2be8889_6432df2bf0a27" width="816" data-width="816" data-height="926">
 
 ## Install
 
