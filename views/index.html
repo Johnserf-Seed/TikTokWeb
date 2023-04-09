@@ -81,21 +81,13 @@
                 })
             try {
                 let seachTxt = window.location.href.split("=");
-                // 00000000 ['http://localhost:3000/']
-                // console.log('00000000',seachTxt)
                 seachTxt = decodeURI(seachTxt [1])
                 if (seachTxt === 'undefined'){
-                    // console.log('11111111',seachTxt, 'is undefined')
-                    video_info.style.display = "none";
+                    $('#video_info').hide();
                 } else {
-                    // 22222222 ['http://localhost:3000/']
-                    // console.log('22222222',typeof(seachTxt), seachTxt)
                     //解码url
-                    // seachTxt = decodeURI(seachTxt [1]); //decodeURI解码
-                    // console.log('33333333',seachTxt)
                     $("#video_url").attr('value',seachTxt)
-                    video_info.style.display = "block";
-                    // console.log('4444444',seachTxt)
+                    $('#video_info').show();
                     return 0;
                 }
             } catch (error) {
@@ -235,37 +227,7 @@
             return 0;
         }
         window.location.href = "/api?url=" + this_url;
-        // $('#get').attr('disabled', '');
     });
-    $("copylink").click(function(){
-        var url = $("source").src
-        navigator.clipboard.writeText(url).then(function() {
-            console.log('copy ok')
-        }, function() {
-            console.log('copy error')
-        });
-    })
-/*
-    $("#get").click(function(){
-        let searchWord = $("#video_url").val();
-        if (!searchWord) alert("空链接")
-            getID (searchWord).then(function(datas){
-            getInfo (datas).then(function(data) {
-                desc = data['item_list'][0]['desc']
-                author = data['item_list'][0]['author']['nickname']
-                play = data['item_list'][0]['video']['play_addr']['url_list'][0]
-                alert(desc);
-            }, function(status) {
-                alert(status + '访问失败');
-            })
-        }, function(status) {//不是单一视频链接
-            getUID(searchWord).then(function(uid){
-            }, function(status) {
-                alert(status + '链接错误')
-            })
-        })
-    });
-*/
 </script>
 <script>
 
