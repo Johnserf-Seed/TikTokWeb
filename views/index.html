@@ -159,17 +159,80 @@
         <div style="display: none;" id="video_info">
             <span>
                 <div class="card">
-                <div class="card-body">
-                <table width="100%">
-                    <tr align="center">
-                        <td>
-                            <div class="video_play">
-                                <!--
-                                <video id="play" preload="auto" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/396624/err.mp4" autoplay muted loop></video>
-                                -->
-                                <video controls autoplay width="50%" controls="controls" id="play" preload="auto" type="video/mp4" webkit-playsinline="true" playsinline="" x5-video-player-type="h5" x5-video-player-fullscreen="portraint">
-                                    <source src="<%= data.url %>" type="video/mp4">
-                                </video>
+                    <div class="card-body">
+                        <div class="container">
+                                <table style="overflow: auto;">
+                                    <tr align="center">
+                                        <td>
+                                            <% if (data.type=='图集'){%>
+                                            <div class="images_play">
+                                                <% for (var i = 0;i<data.images.length;i++) { %>
+                                                    <img alt="<%- data.desc %>"crossorigin="anonymous" src="<%- data.images[i] %>">
+                                                <%}%>
+                                            </div>
+                                            <%} else {%>
+                                            <div class="video_play">
+                                                <!--
+                                                <video id="play" preload="auto" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/396624/err.mp4" autoplay muted loop></video>
+                                                -->
+                                                <video controls autoplay width="50%" controls="controls" id="play" preload="auto" type="video/mp4" webkit-playsinline="true" playsinline="" x5-video-player-type="h5" x5-video-player-fullscreen="portraint">
+                                                    <source src="<%= data.url %>" type="video/mp4">
+                                                </video>
+                                            </div>
+                                            <%}%>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <div class="row">
+                                            <table align="center" style="width: 400px;">
+                                                <tr align="right">
+                                                    <td style="width: 160px;"><span class="column">类型</span></td>
+                                                    <td><span class="column" id="type" style="text-align: center;display: block;"><%= data.type %></span></td>
+                                                </tr>
+                                                <tr align="right">
+                                                    <td style="width: 160px;"><span class="column">文案</span></td>
+                                                    <td><span class="column" id="desc" style="text-align: center;display: block;"><%= data.desc %></span></td>
+                                                </tr>
+                                                <tr align="right">
+                                                    <td style="width: 160px;"><span class="column">抖音ID</span></td>
+                                                    <td><span class="column" id="unique_id" style="text-align: center;display: block;"><%= data.unique_id %></span></td>
+                                                </tr>
+                                                <tr align="right">
+                                                    <td style="width: 160px;"><span class="column">视频ID</span></td>
+                                                    <td><span class="column" id="video_id" style="text-align: center;display: block;"><%= data.video_id %></span></td>
+                                                </tr>
+                                                <tr align="right">
+                                                    <td style="width: 160px;"><span class="column">主页</span></td>
+                                                    <td><a class="column" id="userhome" target="_blank" href="<%= data.userhome %>" style="text-align: center;display: block;"><%= data.nickname %></a></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <tr align="center">
+                                        <td align="center">
+                                                <% if (data.type=='图集'){%>
+                                                <button type='button' id="download" style="color: white;" rel="noreferrer" onclick="downloadall();">
+                                                    下载所有
+                                                </button>
+                                                <%} else { %>
+                                                <button type='button' id="download">
+                                                    <a target="_blank" style="color: white;" rel="noreferrer" href="<%= data.url %>" download="<%= data.desc %>.mp4">
+                                                    下载视频
+                                                    </a>
+                                                </button>
+                                                <% }%>
+                                            </button>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <button id="download">
+                                                <a target="_blank" style="color: white;" rel="noreferrer" href="<%= data.music %>" download="<%= data.m_title %>.mp3">
+                                                    <% if(data.music=='') {%>该原声不可用<%} else {%>下载原声<%} %>
+                                                </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </td>
                     </tr>
