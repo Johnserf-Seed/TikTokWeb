@@ -6,8 +6,6 @@ var logger = require('morgan');
 var favicon = require('serve-favicon')
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
 var apiRouter = require('./routes/api');
 
 var app = express();
@@ -24,10 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public/images/favicon.ico')));
-app.use('/bower_components', express.static(path.join(__dirname + '/bower_components')));
+// 主页
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
 // 调用api
 app.use('/api', apiRouter);
 
@@ -48,7 +44,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-//CROS
+// CROS
 app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
