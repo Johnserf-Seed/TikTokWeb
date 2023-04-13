@@ -36,8 +36,7 @@ http://localhost:4000/
 
 ## Docker
 ```
-git clone https://github.com/Johnserf-Seed/TikTokWeb.git
-cd TikTokWeb
+docker pull johnserfseed/tiktokweb:latest
 docker build . -t tiktokweb
 docker run -d -p 4000:any tiktokweb
 ```
