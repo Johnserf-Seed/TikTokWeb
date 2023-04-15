@@ -152,6 +152,9 @@ router.get('/', async function(req, res, next) {
         GetInfo(res,item_ids,req.cookies['dycookie']).then(data => {
             //console.log('data',data);
             res.render('index', { data });
+        }).catch((error) =>{
+            console.log('GetID error:',error);
+            res.render('error');
         });
     }).catch((error) =>{
         console.log('GetID Error',error);
