@@ -18,142 +18,138 @@
     <script src="../static/javascripts/jquery.cookie.min.js"></script>
     <script src="../static/javascripts/jszip.min.js"></script>
     <script src="../static/javascripts/FileSaver.min.js"></script>
+    <script src="../static/javascripts/sweetalert2.min.js"></script>
+    <script src="../static/javascripts/img2zip.js"></script>
+    <script src="../static/javascripts/progress.js"></script>
 </head>
 <body class="bs-docs-home">
 <div class="col-md-8">
     <div class="tk">
         <h1>TikTokWeb</h1>
+
         <blockquote>
             <p><em>先填写你的抖音cookie，然后输入长短链点击解析试试吧🎉！</em></p>
         </blockquote>
+
         <div class="input-group input-group-lg" style="margin-bottom: 10px;">
-            <input type="text" class="form-control link-input" name="请输入链接" value="https://v.douyin.com/NKyY6Ch/" id="video_url">
+            <input type="text" class="form-control link-input" name="vurl" value="https://v.douyin.com/NKyY6Ch/" placeholder="请输入作品链接" id="video_url">
             <div class="input-group-btn">
                 <div class="btn-clear" id="btn-clear">
                     <button class="btn btn-default" type="button" value="解析" id="get">解析</button>
                     <button class="button button-clear" type="submit" value="设置Cookie" id="setcookie">设置Cookie</button>
                 </div>
             </div>
+            <div class="input-group-btn">
+                <!-- cookie配置-->
+                <form style="display: none;" id="cookieform">
+                    <fieldset>
+                        <ul>
+                            <li>
+                                只需填写cookie的value，不需要填写key 😀
+                            </li>
+                            <li>
+                                大部分情况下只填写ttwid即可解析 😉
+                            </li>
+                            <li>
+                                例如 ttwid的值是1%7CxvIZqo2hPx…………只需要填这部分即可 🥴
+                            </li>
+                            <li>
+                                你的所有信息均储存在本地 🚨
+                            </li>
+                        </ul>
+                        <pre class="savesuccess" style="display: none;"><code>保存成功</code></pre>
+                        <pre class="saveerror" style="display: none;"><code>保存失败</code></pre>
+                        <label for="odin_tt_Field">odin_tt</label>
+                        <input type="text" placeholder="odin_tt的值" id="odin_tt_Field">
+                        <label for="passport_csrf_token_Field">passport_csrf_token</label>
+                        <input type="text" placeholder="passport_csrf_token的值" id="passport_csrf_token_Field">
+                        <label for="sessionid_ss_Field">sessionid_ss</label>
+                        <input type="text" placeholder="sessionid_ss的值" id="sessionid_ss_Field">
+                        <label for="ttwid_Field">ttwid</label>
+                        <input type="text" placeholder="ttwid的值" id="ttwid_Field">
+                        <label for="msToken_Field">msToken</label>
+                        <input type="text" placeholder="msToken的值" id="msToken_Field">
+                        <button class="btn btn-default" type="button" value="保存" id="savecookie">保存</button>
+                        <button class="btn btn-default" type="button" value="清理" id="cleancookie">清理</button>
+                    </fieldset>
+                </form>
+            </div>
         </div>
-        <form style="display: none;" id="cookieform">
-            <fieldset>
-                <ul>
-                    <li>
-                        只需填写cookie的value，不需要填写key 😀
-                    </li>
-                    <li>
-                        例如 odin_tt的值是718d2ae9ed49a5fd4fc1…………只需要填这部分即可 🥴
-                    </li>
-                    <li>
-                        你的所有信息均储存在本地 🚨
-                    </li>
-                </ul>
-                <pre class="savesuccess" style="display: none;"><code>保存成功</code></pre>
-                <pre class="saveerror" style="display: none;"><code>保存失败</code></pre>
-                <label for="odin_tt_Field">odin_tt</label>
-                <input type="text" placeholder="odin_tt的值" id="odin_tt_Field">
-                <label for="passport_csrf_token_Field">passport_csrf_token</label>
-                <input type="text" placeholder="passport_csrf_token的值" id="passport_csrf_token_Field">
-                <label for="sessionid_ss_Field">sessionid_ss</label>
-                <input type="text" placeholder="sessionid_ss的值" id="sessionid_ss_Field">
-                <label for="ttwid_Field">ttwid</label>
-                <input type="text" placeholder="ttwid的值" id="ttwid_Field">
-                <label for="msToken_Field">msToken</label>
-                <input type="text" placeholder="msToken的值" id="msToken_Field">
-                <button class="btn btn-default" type="button" value="保存" id="savecookie">保存</button>
-                <button class="btn btn-default" type="button" value="清理" id="cleancookie">清理</button>
-            </fieldset>
-        </form>
+
+        <!-- 作品详细-->
         <div style="display: none;" id="video_info">
-            <span>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="container">
-                                <table style="overflow: auto;">
-                                    <tr align="center">
-                                        <td>
-                                            <% if (data.type=='图集'){%>
-                                            <div class="images_play">
-                                                <% for (var i = 0;i<data.images.length;i++) { %>
-                                                    <img alt="<%- data.desc %>"crossorigin="anonymous" src="<%- data.images[i] %>">
-                                                <%}%>
-                                            </div>
-                                            <%} else {%>
-                                            <div class="video_play">
-                                                <!--
-                                                <video id="play" preload="auto" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/396624/err.mp4" autoplay muted loop></video>
-                                                -->
-                                                <video controls autoplay width="50%" controls="controls" id="play" preload="auto" type="video/mp4" webkit-playsinline="true" playsinline="" x5-video-player-type="h5" x5-video-player-fullscreen="portraint">
-                                                    <source src="<%= data.url %>" type="video/mp4">
-                                                </video>
-                                            </div>
-                                            <%}%>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                        <div class="row">
-                                            <table align="center" style="width: 400px;">
-                                                <tr align="right">
-                                                    <td style="width: 160px;"><span class="column">类型</span></td>
-                                                    <td><span class="column" id="type" style="text-align: center;display: block;"><%= data.type %></span></td>
-                                                </tr>
-                                                <tr align="right">
-                                                    <td style="width: 160px;"><span class="column">文案</span></td>
-                                                    <td><span class="column" id="desc" style="text-align: center;display: block;"><%= data.desc %></span></td>
-                                                </tr>
-                                                <tr align="right">
-                                                    <td style="width: 160px;"><span class="column">抖音ID</span></td>
-                                                    <td><span class="column" id="unique_id" style="text-align: center;display: block;"><%= data.unique_id %></span></td>
-                                                </tr>
-                                                <tr align="right">
-                                                    <td style="width: 160px;"><span class="column">视频ID</span></td>
-                                                    <td><span class="column" id="video_id" style="text-align: center;display: block;"><%= data.video_id %></span></td>
-                                                </tr>
-                                                <tr align="right">
-                                                    <td style="width: 160px;"><span class="column">主页</span></td>
-                                                    <td><a class="column" id="userhome" target="_blank" href="<%= data.userhome %>" style="text-align: center;display: block;"><%= data.nickname %></a></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        </td>
-                                    </tr>
-                                    <tr align="center">
-                                        <td align="center">
-                                                <% if (data.type=='图集'){%>
-                                                <button type='button' id="download" style="color: white;" rel="noreferrer" onclick="downloadall();">
-                                                    下载所有
-                                                </button>
-                                                <%} else { %>
-                                                <button type='button' id="download">
-                                                    <a target="_blank" style="color: white;" rel="noreferrer" href="<%= data.url %>" download="<%= data.desc %>.mp4">
-                                                    下载视频
-                                                    </a>
-                                                </button>
-                                                <% }%>
-                                            </button>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <button id="download">
-                                                <a target="_blank" style="color: white;" rel="noreferrer" href="<%= data.music %>" download="<%= data.m_title %>.mp3">
-                                                    <% if(data.music=='') {%>该原声不可用<%} else {%>下载原声<%} %>
-                                                </a>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <table style="overflow: auto;">
+                        <tr align="center">
+                            <td>
+                                <% if (videoData.type=='图集'){%>
+                                    <div class="images_play">
+                                        <% for (var i = 0;i < videoData.images.length;i++) { %>
+                                            <img alt="<%- videoData.desc %>"crossorigin="anonymous" src="<%- videoData.images[i] %>">
+                                        <%}%>
+                                    </div>
+                                <%} else {%>
+                                    <div class="video_play">
+                                        <video autoplay width="50%" controls="controls" id="play" preload="auto" type="video/mp4" webkit-playsinline="true" playsinline="" x5-video-player-type="h5" x5-video-player-fullscreen="portraint">
+                                            <source src="<%= videoData.url %>" type="video/mp4">
+                                        </video>
+                                    </div>
+                                <%}%>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    <table align="center" style="width: 60%">
+                                        <tr align="right">
+                                            <td style="width: 40%"><span class="column">类型</span></td>
+                                            <td><span class="column" id="type" style="text-align: center;display: block;"><%= videoData.type %></span></td>
+                                        </tr>
+                                        <tr align="right">
+                                            <td style="width: 40%"><span class="column">文案</span></td>
+                                            <td><span class="column" id="desc" style="text-align: center;display: block;"><%= videoData.desc %></span></td>
+                                        </tr>
+                                        <tr align="right">
+                                            <td style="width: 40%"><span class="column">抖音ID</span></td>
+                                            <td><span class="column" id="unique_id" style="text-align: center;display: block;"><%= videoData.unique_id %></span></td>
+                                        </tr>
+                                        <tr align="right">
+                                            <td style="width: 40%"><span class="column">视频ID</span></td>
+                                            <td><span class="column" id="video_id" style="text-align: center;display: block;"><%= videoData.video_id %></span></td>
+                                        </tr>
+                                        <tr align="right">
+                                            <td style="width: 40%"><span class="column">主页</span></td>
+                                            <td><a class="column" id="userhome" target="_blank" href="<%= videoData.userhome %>" style="text-align: center;display: block;"><%= videoData.nickname %></a></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td align="center">
+                                <% if (videoData.type=='图集'){%>
+                                    <a id="downloadIMG" class="button" role="button" href="javascript:void(0);" rel="noreferrer">下载所有</a>
+                                <%} else { %>
+                                    <a id="downloadVIDEO" class="button" role="button" href="<%- videoData.url %>" download="<%= videoData.desc %>.mp4" rel="noreferrer">下载视频</a>
+                                <% }%>
+                                <a id="downloadMUSIC" class="button" role="button" href="<%- videoData.music %>" download="<%= videoData.m_title %>.mp3" rel="noreferrer">
+                                    <% if(videoData.music=='') {%>该原声不可用<%} else {%>下载原声<%} %>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-            </span>
-            <footer>
-                <span style="text-align: center;display: block;padding: 20px;">
-                <a target="_blank" style="color: #9b4dca;" rel="noreferrer" href="https://github.com/Johnserf-Seed/TikTokWeb">
-                            GitHub · JohnserfSeed · 2023
-                </a>
-                </span>
-            </footer>
+            </div>
         </div>
+
+        <!-- 页脚-->
+        <footer>
+            <span style="text-align: center; display: block; padding: 20px;">
+                <a target="_blank" style="color: #9b4dca;" rel="noreferrer" href="https://github.com/Johnserf-Seed/TikTokWeb">GitHub · JohnserfSeed · 2023</a>
+            </span>
+        </footer>
+
         <!-- 回到顶部-->
         <div class="progress-wrap">
             <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
@@ -302,7 +298,7 @@
             window.location.href = "/api?url=" + video_url.match(URL_REGEXP)[0];
         });
     });
-    </script>
-    <script src="../static/javascripts/progress.js"></script>
+</script>
+<script src="../static/javascripts/downloadFile.js"></script>
 </body>
 </html>
