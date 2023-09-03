@@ -18,46 +18,6 @@
     <script src="../static/javascripts/jquery.cookie.min.js"></script>
     <script src="../static/javascripts/jszip.min.js"></script>
     <script src="../static/javascripts/FileSaver.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('#setcookie').click(function(){
-                    if($('#cookieform').is(':hidden')){
-                        $('#cookieform').show();
-                    } else {
-                        $('#cookieform').hide();
-                    }
-                })
-            try {
-                let seachTxt = window.location.href.split("=");
-                seachTxt = decodeURI(seachTxt [1])
-                if (seachTxt === 'undefined'){
-                    $('#video_info').hide();
-                } else {
-                    //解码url
-                    $("#video_url").attr('value',seachTxt)
-                    $('#video_info').show();
-                    return 0;
-                }
-            } catch (error) {
-                return 0;
-            }
-        });
-    </script>
-    <script>
-        $(document).ready(function(){
-            if (!$.cookie('dycookie')){
-                alert('请先填写抖音的cookie才可以正常解析作品')
-            } else {
-                var dycookie = JSON.parse($.cookie('dycookie'));
-                $('#odin_tt_Field').val(dycookie['odin_tt'])
-                $('#passport_csrf_token_Field').val(dycookie['passport_csrf_token'])
-                $('#sessionid_ss_Field').val(dycookie['sessionid_ss'])
-                $('#ttwid_Field').val(dycookie['ttwid'])
-                $('#msToken_Field').val(dycookie['msToken'])
-            }
-        });
-    </script>
-    <title>TikTokWeb</title>
 </head>
 <body class="bs-docs-home">
 <div class="col-md-8">
@@ -203,75 +163,143 @@
     </div>
 </div>
 <script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
-        }
-    }
-</script>
-
-                }
-<script>
-    $("#get").click(function(){
-        if (!$.cookie('dycookie')){
-            alert('请先填写抖音的cookie才可以正常解析作品')
-            return 0;
-        }
-        let url = $('#video_url').val()
-        if (!url){
-            alert("空链接");
-            return 0;
-        }
-        let regexp = /((http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig;
-        // let urlReg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g //第二种
-        let this_url = url.match(regexp)
-        if(this_url === ''){
-            alert('请填写正确分享链接或内容');
-            return 0;
-        }
-        window.location.href = "/api?url=" + this_url;
     });
-</script>
-<script>
-
-    $("#savecookie").click(function(){
-        const dycookie = {
-            odin_tt:$('#odin_tt_Field').val(),
-            passport_csrf_token: $('#passport_csrf_token_Field').val(),
-            sessionid_ss: $('#sessionid_ss_Field').val(),
-            ttwid: $('#ttwid_Field').val(),
-            msToken: $('#msToken_Field').val(),
+    $(document).ready(function(){
+        const COOKIE_FORM = '#cookieform';
+        const VIDEO_INFO = '#video_info';
+        const VIDEO_URL = "#video_url";
+        const COOKIE_NAME = 'dycookie';
+        const FIELDS_MAP = {
+            'odin_tt': '#odin_tt_Field',
+            'passport_csrf_token': '#passport_csrf_token_Field',
+            'sessionid_ss': '#sessionid_ss_Field',
+            'ttwid': '#ttwid_Field',
+            'msToken': '#msToken_Field'
         };
-        //var cookie = 'dycookie' + "=" + JSON.stringify(dycookie) + '; max-age=' + 30 * 24 * 60 * 60;
-        try {
-            $.cookie('dycookie', JSON.stringify(dycookie), { expires: 30 });
-            //document.cookie = cookie;
-            //localStorage.setItem("dycookie", JSON.stringify(dycookie));
-            alert('保存成功')
-            $('#cookieform').hide();
-        } catch {
-            alert('保存失败')
+        const URL_REGEXP = /((http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig;
+
+        function toggleForm() {
+            $(COOKIE_FORM).toggle();
+        }
+
+        function populateFields(dycookie) {
+            for (let key in FIELDS_MAP) {
+                if (dycookie[key]) {
+                    $(FIELDS_MAP[key]).val(dycookie[key]);
+                }
+            }
+        }
+
+        function showToast(message, icon) {
+            Toast.fire(message, '', icon);
             $('#cookieform').hide();
         }
-    });
-    $("#cleancookie").click(function(){
-        try {
-            $.removeCookie('dycookie',{ path: '/'});
-            $('#odin_tt_Field').val('')
-            $('#passport_csrf_token_Field').val('')
-            $('#sessionid_ss_Field').val('')
-            $('#ttwid_Field').val('')
-            $('#msToken_Field').val('')
-            //localStorage.removeItem("dycookie");
-            alert('清理成功')
-            $('#cookieform').hide();
-        } catch (error) {
-            alert('清理失败')
-            console.log(error)
-            $('#cookieform').hide();
+
+        function updateVideoLink() {
+            try {
+                let query = window.location.href.split("=")[1];
+                query = decodeURI(query);
+
+                if (query === 'undefined') {
+                    $(VIDEO_INFO).hide();
+                } else {
+                    $(VIDEO_URL).val(query);
+                    $(VIDEO_INFO).show();
+                }
+                if ('<%- videoData.work %>' === 'false') {
+                    $(VIDEO_INFO).hide();
+                    Swal.fire('警告','抖音的cooki无效，请重新填写','warning');
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
         }
+
+        $('#setcookie').click(toggleForm);
+        updateVideoLink();
+
+        $("#savecookie").click(function() {
+            const dycookie = {};
+
+            for (let key in FIELDS_MAP) {
+                dycookie[key] = $(FIELDS_MAP[key]).val();
+            }
+
+            try {
+                $.cookie(COOKIE_NAME, JSON.stringify(dycookie), { expires: 30 });
+                showToast('保存成功', 'success');
+            } catch {
+                showToast('保存失败', 'error');
+            }
+        });
+
+        $("#cleancookie").click(function() {
+            try {
+                $.removeCookie(COOKIE_NAME, { path: '/' });
+                for (let key in FIELDS_MAP) {
+                    $(FIELDS_MAP[key]).val('');
+                }
+                showToast('清理成功', 'success');
+            } catch (error) {
+                showToast('清理失败', 'error');
+                console.log(error);
+            }
+        });
+
+        if (!$.cookie(COOKIE_NAME)) {
+            Swal.fire('提示', '填写抖音的cookie才可以正常解析', 'warning');
+        } else {
+            const dycookie = JSON.parse($.cookie(COOKIE_NAME));
+            populateFields(dycookie);
+        }
+
         $("#downloadIMG").click(event => {
             event.preventDefault();
             Toast.fire('图集正在打包中，请稍等...','','info')
             downloadAll('<%- videoData.images %>','<%- videoData.desc %>')
+        });
+
+        $("#downloadVIDEO").click(event => {
+            event.preventDefault();
+            Toast.fire('视频正在下载中，请稍等...', '', 'info');
+            downloadFile('<%- videoData.url %>', '<%= videoData.desc %>.mp4');
+        });
+
+        $("#downloadMUSIC").click(event => {
+            event.preventDefault();
+            Toast.fire('音乐正在下载中，请稍等...', '', 'info');
+            downloadFile('<%= videoData.music %>', '<%= videoData.m_title %>.mp3');
+        });
+
+        $("#get").click(function() {
+            if (!$.cookie('dycookie')) {
+                Swal.fire('警告','请先填写抖音的cookie才可以正常解析作品','warning');
+                return;
+            }
+
+            let video_url = $('#video_url').val().trim();
+
+            if (!video_url) {
+                Swal.fire('警告','还没有输入链接哦','warning');
+                return;
+            }
+
+            if (!URL_REGEXP.test(video_url)) {
+                Swal.fire('错误','请填写正确作品链接','error');
+                return;
+            }
+
+            window.location.href = "/api?url=" + video_url.match(URL_REGEXP)[0];
         });
     });
     </script>
