@@ -74,6 +74,7 @@ jobs:
 
       # 构建并推送到GitHub的容器注册中心
       - name: Build and push to GitHub Container Registry
+        id: build-push-ghcr
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
           context: .
@@ -99,5 +100,10 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         env:
           TAGS: ${{ steps.meta-ghcr.outputs.tags }}
-          DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+          DIGEST: ${{ steps.build-push-ghcr.outputs.digest }}
+        run: |
+          if [ -z "$DIGEST" ]; then
+            echo "DIGEST is empty, can't sign the image!"
+            exit 1
+          fi
+          echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
