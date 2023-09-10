@@ -97,13 +97,9 @@ jobs:
 
       # 使用cosign对GitHub的容器注册中心中的镜像进行签名
       - name: Sign the published Docker image on GHCR
-        if: ${{ github.event_name != 'pull_request' }}
+        # 如果没有摘要，就不会执行签名步骤
+        if: github.event_name != 'pull_request' && steps.build-and-push.outputs.digest != ''
         env:
           TAGS: ${{ steps.meta-ghcr.outputs.tags }}
-          DIGEST: ${{ steps.build-push-ghcr.outputs.digest }}
-        run: |
-          if [ -z "$DIGEST" ]; then
-            echo "DIGEST is empty, can't sign the image!"
-            exit 1
-          fi
-          echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+          DIGEST: ${{ steps.build-and-push.outputs.digest }}
+        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
