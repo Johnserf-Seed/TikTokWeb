@@ -2,8 +2,8 @@ name: Docker
 
 # 定义了触发此workflow的条件
 on:
-  schedule:
-    - cron: '34 22 * * *'
+#  schedule:
+#    - cron: '34 22 * * *'
   push:
     branches: [ "main" ]
     tags: [ 'v*.*.*' ]
@@ -12,8 +12,10 @@ on:
 
 # 定义全局变量
 env:
-  # 我修改了此变量，使其与Docker Hub和GitHub Container Registry的命名约定一致
-  IMAGE_NAME: johnserfseed/TikTokWeb 
+  # 针对 GitHub Container Registry (GHCR) 使用带 '-' 的名称
+  IMAGE_NAME_GHCR: Johnserf-Seed/TikTokWeb 
+  # 针对 Docker Hub 使用不带 '-' 的名称
+  IMAGE_NAME_DOCKERHUB: johnserfseed/TikTokWeb 
 
 jobs:
   build:
@@ -57,18 +59,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # 提取镜像的元数据，如标签和标签
+      # 提取镜像的元数据
       - name: Extract Docker metadata for GHCR
         id: meta-ghcr
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ghcr.io/${{ env.IMAGE_NAME }}
+          images: ghcr.io/${{ env.IMAGE_NAME_GHCR }}
 
       - name: Extract Docker metadata for Docker Hub
         id: meta-dockerhub
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: ${{ env.IMAGE_NAME_DOCKERHUB }}
 
       # 构建并推送到GitHub的容器注册中心
       - name: Build and push to GitHub Container Registry
