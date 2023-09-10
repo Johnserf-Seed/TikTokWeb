@@ -1,5 +1,6 @@
 name: Docker
 
+# 定义了触发此workflow的条件
 on:
   schedule:
     - cron: '34 22 * * *'
@@ -9,8 +10,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# 定义全局变量
 env:
-  IMAGE_NAME: ${{ github.repository }}
+  # 我修改了此变量，使其与Docker Hub和GitHub Container Registry的命名约定一致
+  IMAGE_NAME: johnserfseed/TikTokWeb 
 
 jobs:
   build:
@@ -21,19 +24,22 @@ jobs:
       id-token: write
 
     steps:
+      # 从GitHub仓库中检出代码
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 安装cosign工具
       - name: Install cosign
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@6e04d228eb30da1757ee4e1dd75a0ec73a653e06
         with:
           cosign-release: 'v2.1.1'
 
+      # 设置Docker的buildx环境，它允许多平台的镜像构建
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@79abd3f86f79a9d68a23c75a09a9a85889262adf
 
-      # Login to GHCR
+      # 登录到GitHub的容器注册中心
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
@@ -42,7 +48,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Login to Docker Hub
+      # 登录到Docker Hub
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
@@ -51,7 +57,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # Extract metadata for Docker images
+      # 提取镜像的元数据，如标签和标签
       - name: Extract Docker metadata for GHCR
         id: meta-ghcr
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
@@ -64,7 +70,7 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
 
-      # Build and push to GHCR
+      # 构建并推送到GitHub的容器注册中心
       - name: Build and push to GitHub Container Registry
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
@@ -75,7 +81,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Build and push to Docker Hub
+      # 构建并推送到Docker Hub
       - name: Build and push to Docker Hub
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
@@ -86,7 +92,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Sign the image
+      # 使用cosign对GitHub的容器注册中心中的镜像进行签名
       - name: Sign the published Docker image on GHCR
         if: ${{ github.event_name != 'pull_request' }}
         env:
