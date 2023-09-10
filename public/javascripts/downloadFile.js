@@ -35,13 +35,18 @@ function checkFileSizeAndDownload(url, filename) {
         const size = response.headers.get('Content-Length'); // 获取文件大小
 
         function proceedDownload() {
-            const link = url;
-            const $a = $("<a>", {
-                href: link,
-                download: filename
-            }).appendTo("body");
-            $a[0].click();
-            $a.remove();
+            fetch(url).then(response => {
+                return response.blob();
+            }).then(blob => {
+                const objectURL = URL.createObjectURL(blob);
+                const $a = $("<a>", {
+                    href: objectURL,
+                    download: filename
+                }).appendTo("body");
+                $a[0].click();
+                $a.remove();
+                URL.revokeObjectURL(objectURL);  // 清除对象 URL 以释放内存
+            });
         }
 
         if (size && parseInt(size) > 100 * 1024 * 1024) { // 如果文件大于100MB

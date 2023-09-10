@@ -131,9 +131,9 @@
                                 <% if (videoData.type=='图集'){%>
                                     <a id="downloadIMG" class="button" role="button" href="javascript:void(0);" rel="noreferrer">下载所有</a>
                                 <%} else { %>
-                                    <a id="downloadVIDEO" class="button" role="button" href="<%- videoData.url %>" download="<%= videoData.desc %>.mp4" rel="noreferrer">下载视频</a>
+                                    <a id="downloadVIDEO" class="button" role="button" href="#" download="<%= videoData.desc %>.mp4" rel="noreferrer">下载视频</a>
                                 <% }%>
-                                <a id="downloadMUSIC" class="button" role="button" href="<%- videoData.music %>" download="<%= videoData.m_title %>.mp3" rel="noreferrer">
+                                <a id="downloadMUSIC" class="button" role="button" href="#" download="<%= videoData.m_title %>.mp3" rel="noreferrer">
                                     <% if(videoData.music=='') {%>该原声不可用<%} else {%>下载原声<%} %>
                                 </a>
                             </td>
