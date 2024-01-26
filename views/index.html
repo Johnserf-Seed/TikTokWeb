@@ -35,6 +35,7 @@
             <input type="text" class="form-control link-input" name="vurl" value="https://v.douyin.com/NKyY6Ch/" placeholder="请输入作品链接" id="video_url">
             <div class="input-group-btn">
                 <div class="btn-clear" id="btn-clear">
+                    <button class="btn btn-default" type="button" value="清空并读取剪贴板内容" onclick="clearAndPaste()">清空并读取剪贴板内容</button>
                     <button class="btn btn-default" type="button" value="解析" id="get">解析</button>
                     <button class="button button-clear" type="submit" value="设置Cookie" id="setcookie">设置Cookie</button>
                 </div>
@@ -75,6 +76,23 @@
                 </form>
             </div>
         </div>
+    </div>
+</div>
+
+<script>
+    function clearAndPaste() {
+        // 清空输入框内容
+        document.getElementById('video_url').value = '';
+
+        // 读取剪贴板内容并赋值给输入框
+        navigator.clipboard.readText().then(function(clipText) {
+            document.getElementById('video_url').value = clipText;
+        }).catch(function(err) {
+            console.error('Failed to read clipboard contents: ', err);
+        });
+    }
+</script>
+
 
         <!-- 作品详细-->
         <div style="display: none;" id="video_info">
